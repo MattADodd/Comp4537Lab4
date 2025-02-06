@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
         dictionary.push(new dictionaryListing(parsedBody[0], parsedBody[1]));
 
         req.on('end', () => {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
             res.end(JSON.stringify({ message: 'Data received', body: body }));
         });
     } else if (req.method === GET) {
@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
         }
 
         req.on('end', () => {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
             res.end(JSON.stringify({ dListing }));
         });
     }
