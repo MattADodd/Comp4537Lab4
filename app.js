@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
             const parsedBody = JSON.parse(body);
 
             for (listing in dictionary) {
-                if (listing.word = parsedBody.word.trim()){
+                if (listing.word == parsedBody.word.trim()){
                     res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
                     res.end(JSON.stringify({ message: `Warning, ${listing.word} already in dictionary, no update made`, words: dictionary.length, requests: count }));
                     return;
