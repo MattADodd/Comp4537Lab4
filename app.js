@@ -28,17 +28,25 @@ const server = http.createServer((req, res) => {
 
         req.on('end', () => {
             const parsedBody = JSON.parse(body);
+
+            for (listing in dictionary) {
+                if (listing.word = parsedBody.word.trim()){
+                    res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
+                    res.end(JSON.stringify({ message: `Warning, ${listing.word} already in dictionary, no update made`, words: dictionary.length, requests: count }));
+                }
+            }
+
             dictionary.push(new dictionaryListing(parsedBody.word.trim(), parsedBody.definition.trim()));
 
             res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-            res.end(JSON.stringify({ message: 'Data received', body: parsedBody }));
+            res.end(JSON.stringify({ message: 'Data received', requests: count }));
         });
     } else if (req.method === GET) {
         const word = query.word;
         const dListing = dictionary.find(item => item.word === word);
 
         res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-        res.end(JSON.stringify( dListing || {error: "Word not found"}));
+        res.end(JSON.stringify( dListing || {error: "Word not found", requests: count}));
     }
 });
 
