@@ -3,7 +3,7 @@ const port = 3000;
 const urlModule = require("url");
 const POST = 'POST';
 const GET = 'GET';
-const dictionary = []
+const dictionary = [];
 let count = 0;
 
 class dictionaryListing {
@@ -26,36 +26,22 @@ const server = http.createServer((req, res) => {
             body += chunk;
         });
 
-        const parsedBody = body.replace(/([^:]*:)(.*)/, "$1|$2").split("|");
-        dictionary.push(new dictionaryListing(parsedBody[0], parsedBody[1]));
-
         req.on('end', () => {
+            const parsedBody = body.replace(/([^:]*:)(.*)/, "$1|$2").split("|");
+            dictionary.push(new dictionaryListing(parsedBody[0].trim(), parsedBody[1].trim()));
+
             res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-            res.end(JSON.stringify({ message: 'Data received', body: body }));
+            res.end(JSON.stringify({ message: 'Data received', body: parsedBody }));
         });
     } else if (req.method === GET) {
-        let body = "";
-        count += 1;
+        const word = query.word;
+        const dListing = dictionary.find(item => item.word === word);
 
-        req.on('data', (chunk) => {
-            body += chunk;
-        });
-
-        let dListing;
-        for (listing in dictionary) {
-            if (listing.word === body) {
-                dListing = listing;
-                break;
-            }
-        }
-
-        req.on('end', () => {
-            res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-            res.end(JSON.stringify({ dListing }));
-        });
+        res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
+        res.end(JSON.stringify({ dListing }));
     }
 });
 
-server.listen(port , () => {
+server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
