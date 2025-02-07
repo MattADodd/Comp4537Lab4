@@ -27,8 +27,8 @@ const server = http.createServer((req, res) => {
         });
 
         req.on('end', () => {
-            const parsedBody = body.replace(/([^:]*:)(.*)/, "$1|$2").split("|");
-            dictionary.push(new dictionaryListing(parsedBody[0].trim(), parsedBody[1].trim()));
+            const parsedBody = JSON.parse(body);
+            dictionary.push(new dictionaryListing(parsedBody.word.trim(), parsedBody.dictionary.trim()));
 
             res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
             res.end(JSON.stringify({ message: 'Data received', body: parsedBody }));
