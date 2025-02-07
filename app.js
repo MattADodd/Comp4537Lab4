@@ -17,10 +17,10 @@ const server = http.createServer((req, res) => {
     const parsedUrl = urlModule.parse(req.url, true);
     const url = parsedUrl.pathname.replace(/\/$/, "");
     const query = parsedUrl.query;
+    count += 1;
 
     if (req.method === POST) {
         let body = "";
-        count += 1;
 
         req.on('data', (chunk) => {
             body += chunk;
@@ -40,14 +40,14 @@ const server = http.createServer((req, res) => {
             dictionary.push(new dictionaryListing(parsedBody.word.trim(), parsedBody.definition.trim()));
 
             res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-            res.end(JSON.stringify({ message: 'Data received', requests: count }));
+            res.end(JSON.stringify({ message: 'Data received', words: dictionary.length, requests: count }));
         });
     } else if (req.method === GET) {
         const word = query.word;
         const dListing = dictionary.find(item => item.word === word);
 
         res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-        res.end(JSON.stringify( dListing || {error: "Word not found", requests: count}));
+        res.end(JSON.stringify({ ...(dListing || { error: "Word not found" }), requests: count }));
     }
 });
 
