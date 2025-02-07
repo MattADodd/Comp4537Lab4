@@ -34,11 +34,11 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify({ message: 'Data received', body: parsedBody }));
         });
     } else if (req.method === GET) {
-        const word = query.word;
+        const word = query.word;+
         const dListing = dictionary.find(item => item.word === word);
 
         res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-        res.end(JSON.stringify({ dListing }));
+        res.end(JSON.stringify( dListing || {error: "Word not found"}));
     }
 });
 
