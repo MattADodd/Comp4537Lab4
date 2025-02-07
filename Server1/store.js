@@ -10,7 +10,7 @@ document.getElementById("storeForm").addEventListener("submit", function (event)
     }
 
     // Send the POST request to Server2
-    fetch("https://jellyfish-app-ea8bb.ondigitalocean.app/dansucks", {
+    fetch("https://jellyfish-app-ea8bb.ondigitalocean.app/api/definitions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word, definition }),

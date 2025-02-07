@@ -2,7 +2,7 @@ document.getElementById("searchButton").addEventListener("click", function () {
     const word = document.getElementById("searchInput").value.trim();
 
     // Send the GET request to Server2 API
-    fetch(`https://jellyfish-app-ea8bb.ondigitalocean.app/dansucks/${encodeURIComponent(word)}`)
+    fetch(`https://jellyfish-app-ea8bb.ondigitalocean.app/api/definitions/?word=${encodeURIComponent(word)}`)
         .then(response => response.json())
         .then(data => {
             if (data.definition) {
