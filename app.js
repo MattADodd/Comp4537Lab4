@@ -3,15 +3,10 @@ const port = 3000;
 const urlModule = require("url");
 const POST = 'POST';
 const GET = 'GET';
+const dictionaryListing = require("./modules/dictionarylisting")
+const messages = require("./lang/messages/en/messages")
 const dictionary = [];
 let count = 0;
-
-class dictionaryListing {
-    constructor(word, definition) {
-        this.word = word;
-        this.definition = definition;
-    }
-}
 
 const server = http.createServer((req, res) => {
     const parsedUrl = urlModule.parse(req.url, true);
@@ -42,7 +37,7 @@ const server = http.createServer((req, res) => {
             for (listing of dictionary) {
                 if (listing.word === parsedBody.word.trim()){
                     res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-                    res.end(JSON.stringify({ message: `Warning, ${listing.word} already in dictionary, no update made`, words: dictionary.length, requests: count }));
+                    res.end(JSON.stringify({ message: messages.warning + listing.word + messages.noUpdate, words: dictionary.length, requests: count }));
                     return;
                 }
             }
@@ -50,14 +45,14 @@ const server = http.createServer((req, res) => {
             dictionary.push(new dictionaryListing(parsedBody.word.trim(), parsedBody.definition.trim()));
 
             res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-            res.end(JSON.stringify({ message: 'Data received', words: dictionary.length, requests: count }));
+            res.end(JSON.stringify({ message: messages.received, words: dictionary.length, requests: count }));
         });
     } else if (req.method === GET) {
         const word = query.word;
         const dListing = dictionary.find(item => item.word === word);
 
         res.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "*" });
-        res.end(JSON.stringify({ ...(dListing || { error: "Word not found" }), requests: count }));
+        res.end(JSON.stringify({ ...(dListing || { error: messages.notFound }), requests: count }));
     }
 });
 
