@@ -1,20 +1,32 @@
 document.getElementById("searchButton").addEventListener("click", function () {
-    const word = document.getElementById("searchInput").value.trim();
+  const word = document.getElementById("searchInput").value.trim();
 
-    // Send the GET request to Server2 API
-    fetch(`https://jellyfish-app-ea8bb.ondigitalocean.app/api/definitions/?word=${encodeURIComponent(word)}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.definition) {
-                document.getElementById("searchResult").innerText = `Definition: ${data.definition}`;
-            } else {
-                document.getElementById("searchResult").innerText = `Request #${data.requestCount}, word '${word}' not found!`;
-            }
-        })
-        .catch(error => {
-            document.getElementById("searchResult").innerText = "Error: " + error;
-        });
+  if (!word || /\d/.test(word)) {
+    document.getElementById("searchResult").innerText =
+      "Invalid input. Please enter a valid word.";
+    return;
+  }
 
-    // Clear the search input field
-    document.getElementById("searchInput").value = "";
+  fetch(
+    `https://jellyfish-app-ea8bb.ondigitalocean.app/api/definitions/?word=${encodeURIComponent(
+      word
+    )}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.definition) {
+        document.getElementById(
+          "searchResult"
+        ).innerText = `Definition: ${data.definition}`;
+      } else {
+        document.getElementById(
+          "searchResult"
+        ).innerText = `Request #${data.requests}, word '${word}' not found!`;
+      }
+    })
+    .catch((error) => {
+      document.getElementById("searchResult").innerText = "Error: " + error;
+    });
+
+  document.getElementById("searchInput").value = "";
 });
