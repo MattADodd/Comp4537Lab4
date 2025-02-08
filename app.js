@@ -19,6 +19,16 @@ const server = http.createServer((req, res) => {
     const query = parsedUrl.query;
     count += 1;
 
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204, {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        });
+        res.end();
+        return;
+    }
+
     if (req.method === POST) {
         let body = "";
 
